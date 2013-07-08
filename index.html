@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Config Manager</title>
+    <script src="scripts/jquery-1.8.2.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section id="field-0"class="field">
+	<span class="heading">Field 1</span>
+	<label for="input-name">What is the SAP identity of this input?</label>
+	<input type='text' id='input-name-0'/><br>
+	<label for="input-desc">What is the description for this input?</label>
+	<input type='text' id='input-dec-0'/><br>
+	<label for="input-type">Should this field be hidden on the form?</label>
+	<input type="checkbox" name="input-hide-0" value="yes">Yes<br>
+	<label for="input-type">What type of input?</label>
+	<input type="radio" name="input-type-0" value="male">Text
+	<input type="radio" name="input-type-0" value="female">Number
+	<input type="radio" name="input-type-0" value="female">Select
+	<input type="radio" name="input-type-0" value="female">Radio<br>
+	<div class='options'>
+		
+	</div>
+	<span id="add-rule-group">Add Rule Group <i class="icon-plus icon-4"></i></span>
+</section>
+</body>
+<script>
+$(document).ready(function() {
+  
+	$('#field-0 input[type=radio]').each(function(){
+		$(this).click( function( event ){
+			alert(1);
+		});
+	});
+
+	addRuleGroup('field-0');
+	$('#add-rule-group').click(function(){
+
+		addRuleGroup('field-0');
+	});
+	
+});
+
+function addRuleGroup(elementId){
+
+	var parent = document.getElementById(elementId);
+	var optionsArea = parent.querySelector('.options');
+	var div = document.createElement('div');
+	div.className = 'rule-group';
+	div.innerHTML = "<p>Rule stuff will go here</p>";
+	var title = document.createElement('span');
+
+	var numRules = $('#'+ elementId + ' .rule-group').length;
+	numRules++;
+
+	title.innerHTML = "Rule group " + numRules + " <i class='icon-collapse'></i>";
+	title.className = "heading-rule";
+	div.appendChild(title);
+	optionsArea.appendChild(div);
+
+	var remove = document.createElement('span');
+	remove.innerHTML = 'Delete Rule <i class="icon-remove icon-4"></i>';
+	remove.className = 'delete-rule-group';
+	div.appendChild(remove);
+
+	addOption(div);
+
+	$(title).click(function()
+	{
+		if($(this).children('i').hasClass('icon-collapse')){
+
+			$(this).siblings().each(function(){
+				$(this).hide();
+			});
+
+			$(this).children('i').removeClass('icon-collapse').addClass('icon-expand');
+		}
+		else{
+
+			$(this).siblings().each(function(){
+				$(this).show();
+			});
+
+			$(this).children('i').addClass('icon-collapse').removeClass('icon-expand');
+		}
+		
+	});
+}
+
+function addOption(element){
+
+	//var parent = document.getElementById(elementId);
+	//var optionsArea = parent.querySelector('.options');
+	var section = document.createElement('section');
+	var lblValue = document.createElement('label');
+	lblValue.innerHTML = 'Value:';
+	var txtValue = document.createElement('input');
+	txtValue.type = 'text';
+	section.appendChild(lblValue);
+	section.appendChild(txtValue);
+	var lblName = document.createElement('label');
+	lblName.innerHTML = 'Name:';
+	var txtName = document.createElement('input');
+	txtName.type = 'text';	
+	section.appendChild(lblName);
+	section.appendChild(txtName);
+	element.appendChild(section);
+
+	$(txtName).change(function()
+	{
+			addOption(element);
+	});
+}
+
+</script>
+</html>
