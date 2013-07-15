@@ -1488,7 +1488,7 @@ body {
   margin-top: 30px;
   position: relative; }
 
-#add-rule-group {
+.add-rule-group {
   color: #00aa00;
   cursor: pointer; }
 

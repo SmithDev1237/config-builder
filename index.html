@@ -7,52 +7,117 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<section id="field-0"class="field">
-	<span class="heading">Field 1</span>
-	<label for="input-name">What is the SAP identity of this input?</label>
-	<input type='text' id='input-name-0'/><br>
-	<label for="input-desc">What is the description for this input?</label>
-	<input type='text' id='input-dec-0'/><br>
-	<label for="input-type">Should this field be hidden on the form?</label>
-	<input type="checkbox" name="input-hide-0" value="yes">Yes<br>
-	<label for="input-type">What type of input?</label>
-	<input type="radio" name="input-type-0" value="male">Text
-	<input type="radio" name="input-type-0" value="female">Number
-	<input type="radio" name="input-type-0" value="female">Select
-	<input type="radio" name="input-type-0" value="female">Radio<br>
-	<div class='options'>
-		
-	</div>
-	<span id="add-rule-group">Add Rule Group <i class="icon-plus icon-4"></i></span>
-</section>
+<div id="work-area">
+	
+</div>
 </body>
 <script>
 $(document).ready(function() {
   
-	$('#field-0 input[type=radio]').each(function(){
-		$(this).click( function( event ){
-			alert(1);
-		});
-	});
+	addField();
 
-	addRuleGroup('field-0');
-	$('#add-rule-group').click(function(){
+	//addRuleGroup('field-0');
+	//$('#add-rule-group').click(function(){
 
-		addRuleGroup('field-0');
-	});
+	//	addRuleGroup('field-0');
+	//});
 	
 });
 
-function addRuleGroup(elementId){
+function addField(){
 
-	var parent = document.getElementById(elementId);
-	var optionsArea = parent.querySelector('.options');
+	var section = document.createElement('section');
+	section.className = "field";
+	var spnHeading = document.createElement('span');
+	spnHeading.className = "heading";
+	var numFields = $('.field').length;
+	numFields++;
+	spnHeading.innerHTML = "Field "+ numFields;
+	section.appendChild(spnHeading);
+	var lblValue = document.createElement('label');
+	lblValue.innerHTML = 'What is the SAP identity of this input?';
+	var txtValue = document.createElement('input');
+	txtValue.type = 'text';
+	var lineBreak = document.createElement('br');
+	section.appendChild(lblValue);
+	section.appendChild(txtValue);
+	section.appendChild(lineBreak);
+	var lblValue1 = document.createElement('label');
+	lblValue1.innerHTML = 'What is the description for this input?';
+	var txtValue1 = document.createElement('input');
+	txtValue1.type = 'text';
+	lineBreak = document.createElement('br');
+	section.appendChild(lblValue1);
+	section.appendChild(txtValue1);	
+	section.appendChild(lineBreak);
+	var lblValue2 = document.createElement('label');
+	lblValue2.innerHTML = 'Hide on the form?';
+	var txtValue2 = document.createElement('input');
+	txtValue2.type = 'checkbox';
+	section.appendChild(lblValue2);
+	section.appendChild(txtValue2);	
+
+	var options = document.createElement('div');
+	options.className = "options";
+	section.appendChild(options);
+
+	
+
+	var spnAddRule = document.createElement('span');
+	spnAddRule.innerHTML = 'Add Rule Group ';
+	spnAddRule.className = 'add-rule-group';
+	$(spnAddRule).click(function(){
+
+		addRuleGroup(section);
+	});
+	var icon = document.createElement('i');
+	icon.className = 'icon-plus icon-4';
+	spnAddRule.appendChild(icon);
+	section.appendChild(spnAddRule);
+
+	var div = document.getElementById('work-area');
+	div.appendChild(section);
+	
+	addRuleGroup(section);
+}
+
+function addRule(element){
+
+	var sctRule = document.createElement('section');
+	var lblValue1 = document.createElement('label');
+	lblValue1.innerHTML = 'IF ';
+	sctRule.appendChild(lblValue1);
+	var txtElement = document.createElement('input');
+	txtElement.type = 'text';
+	var slcCondition = document.createElement('select');
+	var option1 = document.createElement("option");
+	option1.text = "Equal";
+	var option2 = document.createElement("option");
+	option2.text = "Not Equal";
+	var option3 = document.createElement("option");
+	option3.text = "Greater Than";
+	var option4 = document.createElement("option");
+	option4.text = "Less Than";
+	slcCondition.add(option1,0);
+	slcCondition.add(option2,1);
+	slcCondition.add(option3,2);
+	slcCondition.add(option4,3);
+	sctRule.appendChild(txtElement);
+	sctRule.appendChild(slcCondition);
+	element.appendChild(sctRule);
+}
+
+function addRuleGroup(element){
+
+	//var parent = document.getElementById(elementId);
+	var optionsArea = element.querySelector('.options');
 	var div = document.createElement('div');
 	div.className = 'rule-group';
 	div.innerHTML = "<p>Rule stuff will go here</p>";
+	addRule(div);
 	var title = document.createElement('span');
 
-	var numRules = $('#'+ elementId + ' .rule-group').length;
+	var numRules = $(optionsArea).children('.rule-group').length;	
 	numRules++;
 
 	title.innerHTML = "Rule group " + numRules + " <i class='icon-collapse'></i>";
