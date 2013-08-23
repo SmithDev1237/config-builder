@@ -1474,19 +1474,22 @@ body {
 .heading-rule {
   position: absolute;
   height: 30px;
-  background-color: white;
+  background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(black));
+  background: -moz-linear-gradient(top, #eeeeee, black);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='black');
   top: -18px;
-  border: 2px dotted #ccc;
   padding-left: 10px;
   padding-right: 5px;
-  cursor: pointer; }
+  cursor: pointer;
+  color: white; }
 
 .rule-group {
   border: 2px dotted #ccc;
   padding: 10px;
   margin: 10px;
   margin-top: 30px;
-  position: relative; }
+  position: relative;
+  background-color: #eee; }
 
 .add-rule-group {
   color: #00aa00;

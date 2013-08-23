@@ -145,6 +145,15 @@ function addRule(element){
 	sctRule.appendChild(txtElement);
 	sctRule.appendChild(slcCondition);
 	sctRule.appendChild(txtElement2);
+
+	var add = document.createElement('span');
+	add.innerHTML = '<i class="icon-plus icon-4"></i>';
+	$(add).click(function(){
+
+		addRule(element);
+	});
+
+	sctRule.appendChild(add);
 	element.appendChild(sctRule);
 }
 
@@ -170,9 +179,7 @@ function addRuleGroup(element){
 	remove.innerHTML = 'Delete Rule <i class="icon-remove icon-4"></i>';
 	remove.className = 'delete-rule-group';
 	
-	$(remove).click(function(){	
-
-		
+	$(remove).click(function(){		
 		
 		$(div).remove();
 		//updateFieldNumbers();
@@ -226,7 +233,7 @@ function addOption(element){
 
 	$(txtName).change(function()
 	{
-			addOption(element);
+		addOption(element);
 	});
 }
 

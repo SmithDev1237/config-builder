@@ -32,13 +32,14 @@ body{
 
 .heading-rule{
 	position:absolute;
-	height:30px;
-	background-color:white;
+	height:30px;	
+	@include gradient(#eee,#000);
 	top:-18px;
-	border:2px dotted #ccc;
+	
 	padding-left:10px;
 	padding-right:5px;
 	cursor:pointer;
+	color:white;
 }
 .rule-group{
 	border:2px dotted #ccc;
@@ -46,6 +47,7 @@ body{
 	margin:10px;
 	margin-top:30px;
 	position:relative;
+	background-color:#eee;
 }
 .add-rule-group{
 	color:#00aa00;
