@@ -1492,7 +1492,16 @@ body {
   color: #00aa00;
   cursor: pointer; }
 
-.delete-rule-group {
+.delete-rule-group, .delete-field {
   color: red;
   cursor: pointer;
-  float: right; }
+  float: right;
+  padding-left: 20px; }
+
+.add-field {
+  float: right;
+  color: #00aa00;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 30px;
+  font-size: 22px; }

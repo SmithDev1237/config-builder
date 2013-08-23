@@ -28,6 +28,15 @@ $(document).ready(function() {
 		
 	});
 
+function updateFieldNumbers(){
+
+	var fieldNumber = 1;
+
+	$('.field-number').each(function(){
+		$(this).text('Field ' + fieldNumber);
+		fieldNumber++;
+	});
+}
 
 function addField(){
 
@@ -37,12 +46,11 @@ function addField(){
 	spnHeading.className = "heading";
 	var numFields = $('.field').length;
 	numFields++;
-	spnHeading.innerHTML = "Field "+ numFields;
-	section.appendChild(spnHeading);
+	spnHeading.innerHTML = "<span class='field-number'>Field "+ numFields + '</span>';
 
 
 	var remove = document.createElement('span');
-	remove.innerHTML = 'Delete Field <i class="icon-remove icon-4"></i>';
+	remove.innerHTML = ' <i class="icon-remove icon-4"></i>';
 	remove.className = 'delete-field';
 
 	$(remove).click(function(){
@@ -55,9 +63,13 @@ function addField(){
 		}
 		
 		$(section).remove();
+		updateFieldNumbers();
 	});
 
-	section.appendChild(remove);
+	spnHeading.appendChild(remove);
+
+
+	section.appendChild(spnHeading);	
 
 
 	var lblValue = document.createElement('label');
@@ -127,9 +139,12 @@ function addRule(element){
 	slcCondition.add(option1,0);
 	slcCondition.add(option2,1);
 	slcCondition.add(option3,2);
-	slcCondition.add(option4,3);
+	slcCondition.add(option4,3);	
+	var txtElement2 = document.createElement('input');
+	txtElement2.type = 'text';
 	sctRule.appendChild(txtElement);
 	sctRule.appendChild(slcCondition);
+	sctRule.appendChild(txtElement2);
 	element.appendChild(sctRule);
 }
 
@@ -154,6 +169,16 @@ function addRuleGroup(element){
 	var remove = document.createElement('span');
 	remove.innerHTML = 'Delete Rule <i class="icon-remove icon-4"></i>';
 	remove.className = 'delete-rule-group';
+	
+	$(remove).click(function(){	
+
+		
+		
+		$(div).remove();
+		//updateFieldNumbers();
+	});
+
+
 	div.appendChild(remove);
 
 	addOption(div);
