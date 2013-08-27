@@ -4,29 +4,37 @@
     <meta charset="utf-8" />
     <title>Config Manager</title>
     <script src="scripts/jquery-1.8.2.js"></script>
+    <script src="scripts/jquery-ui.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="menu">
+	<span id="add-field">New Field <i class="icon-file" title="New Field"></i></span>
+	<span id="save-form">Save <i class="icon-save" title="Save Form"></i></span>
+</div>
 <div id="work-area"></div>
-<span class="add-field" id="add-field">Add New Field <i class="icon-plus"></i></span>
+
+
 </body>
+
 <script>
+
 $(document).ready(function() {
   
-	addField();
-
-	//addRuleGroup('field-0');
-	//$('#add-rule-group').click(function(){
-
-	//	addRuleGroup('field-0');
-	//});
+	addField();	
 
 	$('#add-field').click(function(){
 
-			addField();
-		});
-		
+		addField();
 	});
+
+	$( "#work-area" ).sortable({ 
+		stop: function(){
+			updateFieldNumbers()
+		}
+    });
+		
+});
 
 function updateFieldNumbers(){
 
@@ -34,6 +42,16 @@ function updateFieldNumbers(){
 
 	$('.field-number').each(function(){
 		$(this).text('Field ' + fieldNumber);
+		fieldNumber++;
+	});
+}
+
+function updateRuleNumbers(element){
+
+	var fieldNumber = 1;
+
+	$(element).find('.rule-number').each(function(){
+		$(this).text('Rule group ' + fieldNumber);
 		fieldNumber++;
 	});
 }
@@ -55,6 +73,11 @@ function addField(){
 
 	$(remove).click(function(){
 
+		var didConfirm = confirm("Are you sure?");
+		if (didConfirm == false) {
+	    	return;
+	  	}
+
 		var numFields = $('.field').length;
 
 		if(numFields == 1){
@@ -73,7 +96,7 @@ function addField(){
 
 
 	var lblValue = document.createElement('label');
-	lblValue.innerHTML = 'What is the SAP identity of this input?';
+	lblValue.innerHTML = 'SAP ID: ';
 	var txtValue = document.createElement('input');
 	txtValue.type = 'text';
 	var lineBreak = document.createElement('br');
@@ -81,13 +104,35 @@ function addField(){
 	section.appendChild(txtValue);
 	section.appendChild(lineBreak);
 	var lblValue1 = document.createElement('label');
-	lblValue1.innerHTML = 'What is the description for this input?';
+	lblValue1.innerHTML = 'Field Name: ';
 	var txtValue1 = document.createElement('input');
 	txtValue1.type = 'text';
 	lineBreak = document.createElement('br');
 	section.appendChild(lblValue1);
 	section.appendChild(txtValue1);	
 	section.appendChild(lineBreak);
+
+	var lblValue3 = document.createElement('label');
+	lblValue3.innerHTML = 'Input Type: ';
+
+	var slcCondition = document.createElement('select');
+	var option1 = document.createElement("option");
+	option1.text = "Number";
+	var option2 = document.createElement("option");
+	option2.text = "Select";
+	var option3 = document.createElement("option");
+	option3.text = "Text";
+	
+	slcCondition.add(option1,'NUMBER');
+	slcCondition.add(option2,'SELECT');
+	slcCondition.add(option3,'TEXT');
+
+
+	lineBreak = document.createElement('br');
+	section.appendChild(lblValue3);	
+	section.appendChild(slcCondition);
+	section.appendChild(lineBreak);
+
 	var lblValue2 = document.createElement('label');
 	lblValue2.innerHTML = 'Hide on the form?';
 	var txtValue2 = document.createElement('input');
@@ -117,13 +162,26 @@ function addField(){
 	div.appendChild(section);
 	
 	addRuleGroup(section);
+	window.scrollTo(0,document.body.scrollHeight);
 }
 
 function addRule(element){
 
+	var numConditions = $(element).find('.condition').length;
 	var sctRule = document.createElement('section');
+	sctRule.className = 'condition'
 	var lblValue1 = document.createElement('label');
-	lblValue1.innerHTML = 'IF ';
+	
+	if(numConditions == 0){
+
+		lblValue1.innerHTML = 'IF&nbsp;&nbsp;&nbsp;&nbsp; ';
+	}
+	else{
+
+		lblValue1.innerHTML = 'AND ';
+	}
+
+	
 	sctRule.appendChild(lblValue1);
 	var txtElement = document.createElement('input');
 	txtElement.type = 'text';
@@ -142,18 +200,29 @@ function addRule(element){
 	slcCondition.add(option4,3);	
 	var txtElement2 = document.createElement('input');
 	txtElement2.type = 'text';
-	sctRule.appendChild(txtElement);
-	sctRule.appendChild(slcCondition);
-	sctRule.appendChild(txtElement2);
 
-	var add = document.createElement('span');
-	add.innerHTML = '<i class="icon-plus icon-4"></i>';
-	$(add).click(function(){
+	$(txtElement2).change(function(){
 
 		addRule(element);
 	});
 
-	sctRule.appendChild(add);
+	sctRule.appendChild(txtElement);
+	sctRule.appendChild(slcCondition);
+	sctRule.appendChild(txtElement2);
+
+	var remove = document.createElement('span');
+	remove.innerHTML = '<i class="icon-remove icon-4"></i>';
+	
+	$(remove).click(function(){		
+
+		if(numConditions == 1){
+
+			return;
+		}
+		$(sctRule).remove();
+	});
+
+	sctRule.appendChild(remove);
 	element.appendChild(sctRule);
 }
 
@@ -163,14 +232,17 @@ function addRuleGroup(element){
 	var optionsArea = element.querySelector('.options');
 	var div = document.createElement('div');
 	div.className = 'rule-group';
-	div.innerHTML = "<p>Rule stuff will go here</p>";
-	addRule(div);
+	div.innerHTML = "<p>Rule stuff will go here</p>";	
+	var condition = document.createElement('section');
+	condition.className = 'conditions';
+	div.appendChild(condition);
+	addRule(condition);
 	var title = document.createElement('span');
 
 	var numRules = $(optionsArea).children('.rule-group').length;	
 	numRules++;
 
-	title.innerHTML = "Rule group " + numRules + " <i class='icon-collapse'></i>";
+	title.innerHTML = "<span class='rule-number'>Rule group " + numRules + "</span> <i class='icon-collapse'></i>";
 	title.className = "heading-rule";
 	div.appendChild(title);
 	optionsArea.appendChild(div);
@@ -181,8 +253,13 @@ function addRuleGroup(element){
 	
 	$(remove).click(function(){		
 		
+		var didConfirm = confirm("Are you sure?");
+		if (didConfirm == false) {
+	    	return;
+	  	}
+	  	
 		$(div).remove();
-		//updateFieldNumbers();
+		updateRuleNumbers(element);
 	});
 
 
@@ -217,6 +294,7 @@ function addOption(element){
 	//var parent = document.getElementById(elementId);
 	//var optionsArea = parent.querySelector('.options');
 	var section = document.createElement('section');
+	section.className = 'option';
 	var lblValue = document.createElement('label');
 	lblValue.innerHTML = 'Value:';
 	var txtValue = document.createElement('input');
@@ -224,16 +302,31 @@ function addOption(element){
 	section.appendChild(lblValue);
 	section.appendChild(txtValue);
 	var lblName = document.createElement('label');
-	lblName.innerHTML = 'Name:';
+	lblName.innerHTML = ' Name:';
 	var txtName = document.createElement('input');
 	txtName.type = 'text';	
 	section.appendChild(lblName);
 	section.appendChild(txtName);
 	element.appendChild(section);
 
+	var remove = document.createElement('span');
+	remove.innerHTML = '<i class="icon-remove icon-4"></i>';
+	section.appendChild(remove);
+
 	$(txtName).change(function()
 	{
 		addOption(element);
+	});
+
+	$(remove).click(function(){		
+
+		var numOptions = $(element).find('.option').length;
+
+		if(numOptions == 1){
+			return;
+		}
+
+		$(section).remove();
 	});
 }
 
